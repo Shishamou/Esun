@@ -4,7 +4,7 @@
  * @author Shisha <shisha@mynet.com.tw>, 20160108 Genki Co.Ltd.
  */
 
-namespace Esum\VirtualAccount;
+namespace Esun\VirtualAccount;
 
 use Exception;
 

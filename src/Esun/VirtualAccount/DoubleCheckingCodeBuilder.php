@@ -1,15 +1,17 @@
 <?php
 /**
- * 單碼檢查碼虛擬帳號生成器
+ * 雙碼檢查碼虛擬帳號生成器
  * @author Shisha <shisha@mynet.com.tw>, 20160108 Genki Co.Ltd.
  */
 
-namespace Esum\VirtualAccount;
+namespace Esun\VirtualAccount;
 
-class SingleCheckingCodeBuilder implements AccountCheckingCodeBuilder
+class DoubleCheckingCodeBuilder implements AccountCheckingCodeBuilder
 {
-    const BASE_CHECKING_STRING = "654321987654321";
-    const AMOUNT_CHECKING_STRING = "87654321";
+    const BASE_CHECKING_STRING_PART_A = "31731731731731";
+    const BASE_CHECKING_STRING_PART_B = "73973973973973";
+    const AMOUNT_CHECKING_STRING_PART_A = "31731731";
+    const AMOUNT_CHECKING_STRING_PART_B = "73973973";
 
     /**
      * 檢核帳號
@@ -19,9 +21,10 @@ class SingleCheckingCodeBuilder implements AccountCheckingCodeBuilder
      */
     public function buildWithBaseChecking($account)
     {
-        $p = $this->getCheckingCode($account, static::BASE_CHECKING_STRING);
+        $o = $this->getCheckingCode($account, static::BASE_CHECKING_STRING_PART_A);
+        $p = $this->getCheckingCode($account, static::BASE_CHECKING_STRING_PART_B);
 
-        $account = "{$account}{$p}";
+        $account = "{$account}{$o}{$p}";
         $this->checkAccountLength($account);
         return $account;
     }
@@ -35,11 +38,15 @@ class SingleCheckingCodeBuilder implements AccountCheckingCodeBuilder
      */
     public function buildWithAmountChecking($account, $amount)
     {
-        $t1 = $this->getCheckingCode($account, static::BASE_CHECKING_STRING);
-        $t2 = $this->getCheckingCode($amount, static::AMOUNT_CHECKING_STRING);
-        $p = substr($t1 + $t2, -1);
+        $o1 = $this->getCheckingCode($account, static::BASE_CHECKING_STRING_PART_A);
+        $o2 = $this->getCheckingCode($amount, static::AMOUNT_CHECKING_STRING_PART_A);
+        $o = substr($o1 + $o2, -1);
 
-        $account = "{$account}{$p}";
+        $p1 = $this->getCheckingCode($account, static::BASE_CHECKING_STRING_PART_B);
+        $p2 = $this->getCheckingCode($amount, static::AMOUNT_CHECKING_STRING_PART_B);
+        $p = substr($p1 + $p2, -1);
+
+        $account = "{$account}{$o}{$p}";
         $this->checkAccountLength($account);
         return $account;
     }
@@ -69,9 +76,6 @@ class SingleCheckingCodeBuilder implements AccountCheckingCodeBuilder
      */
     public function buildWithAmountAndDateTimeChecking($account, $amount, $date)
     {
-        $date = str_pad(date('zG', strtotime("+1 day", $date)), 5, 0, STR_PAD_LEFT);
-        $this->checkAccountDate($account, $date);
-
         return $this->buildWithAmountChecking($account, $amount);
     }
 
@@ -120,9 +124,9 @@ class SingleCheckingCodeBuilder implements AccountCheckingCodeBuilder
      */
     private function checkAccountLength($account)
     {
-        if ($len = strlen($account) > 16) {
+        if ($len = strlen($account) > 17) {
             throw new BuildVirtualAccountFail(
-                "虛擬帳號長度過長：{$account}，長度：$len（限制：16）"
+                "虛擬帳號長度過長：{$account}，長度：$len（限制：17）"
             );
         }
     }
