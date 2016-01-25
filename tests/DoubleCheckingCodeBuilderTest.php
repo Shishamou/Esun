@@ -46,5 +46,4 @@ class DoubleCheckingCodeBuilderTest extends PHPUnit_Framework_TestCase
             "9955101190115"
         );
     }
-
 }

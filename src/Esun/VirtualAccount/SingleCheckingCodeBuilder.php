@@ -12,6 +12,16 @@ class SingleCheckingCodeBuilder implements AccountCheckingCodeBuilder
     const AMOUNT_CHECKING_STRING = "87654321";
 
     /**
+     * 取得虛擬帳號預留長度
+     *
+     * @return integer
+     */
+    public function getReservedLength()
+    {
+        return 1;
+    }
+
+    /**
      * 檢核帳號
      *
      * @param string 包含企業識別碼但不包含檢查碼的虛擬帳號
@@ -22,7 +32,6 @@ class SingleCheckingCodeBuilder implements AccountCheckingCodeBuilder
         $p = $this->getCheckingCode($account, static::BASE_CHECKING_STRING);
 
         $account = "{$account}{$p}";
-        $this->checkAccountLength($account);
         return $account;
     }
 
@@ -40,7 +49,6 @@ class SingleCheckingCodeBuilder implements AccountCheckingCodeBuilder
         $p = substr($t1 + $t2, -1);
 
         $account = "{$account}{$p}";
-        $this->checkAccountLength($account);
         return $account;
     }
 
@@ -107,23 +115,11 @@ class SingleCheckingCodeBuilder implements AccountCheckingCodeBuilder
         $accountDate = substr($account, 5, strlen($dateString));
         if ($accountDate !== $dateString) {
             throw new BuildVirtualAccountFail(
-                "輸入日期與銷帳編號不符；輸入日期：{$dateString}，銷帳編號日期：{$accountDate}"
+                "輸入日期與銷帳編號不符；輸入日期：{$dateString}，銷帳編號日期：{$accountDate}",
+                BuildVirtualAccountFail::CHECKING_ACCOUNT_DATE_FAIL
             );
         }
     }
 
-    /**
-     * 檢驗虛擬帳號長度
-     *
-     * @param string 要被檢查的虛擬帳號
-     * @throws BuildVirtualAccountFail
-     */
-    private function checkAccountLength($account)
-    {
-        if ($len = strlen($account) > 16) {
-            throw new BuildVirtualAccountFail(
-                "虛擬帳號長度過長：{$account}，長度：$len（限制：16）"
-            );
-        }
-    }
+
 }

@@ -46,5 +46,4 @@ class SingleCheckingCodeBuilderTest extends PHPUnit_Framework_TestCase
             "9912321310891"
         );
     }
-
 }

@@ -7,7 +7,7 @@
 
 
 $composer = __DIR__ . '/../vendor/autoload.php';
-if ((file_exists($composer) == is_readable($composer)) === true) {
+if (file_exists($composer) AND is_readable($composer)) {
 	require $composer;
 }
 
@@ -34,7 +34,7 @@ spl_autoload_register(function($requestClassName) {
 
 	$requestPath = strtr($requestPath, '\\', DIRECTORY_SEPARATOR) . '.php';
 
-	if ((file_exists($requestPath) AND is_readable($requestPath)) === true) {
+	if (file_exists($requestPath) AND is_readable($requestPath)) {
 		require_once $requestPath;
 	}
 });
