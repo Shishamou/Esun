@@ -7,6 +7,8 @@
 namespace Esun\VirtualAccount;
 
 use Esun\VirtualAccount\BuildVirtualAccountFail as Exception;
+use Esun\VirtualAccount\CheckingCodeBuilder\SingleCheckingCodeBuilder;
+use Esun\VirtualAccount\CheckingCodeBuilder\DoubleCheckingCodeBuilder;
 
 class VirtualAccountBuilder
 {
