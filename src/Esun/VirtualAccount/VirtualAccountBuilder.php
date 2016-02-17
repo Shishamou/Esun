@@ -59,7 +59,10 @@ class VirtualAccountBuilder
     {
         $maxSize = static::COMPANY_ID_SIZE;
         if (strlen($companyId) != $maxSize)
-            throw new Exception("企業識別碼必須為 {$maxSize} 位數數字。", Exception::COMPANY_ID_WRONG_SIZE);
+            throw new Exception(
+                "企業識別碼必須為 {$maxSize} 位數數字。",
+                Exception::COMPANY_ID_WRONG_SIZE
+            );
 
         $this->companyId = $companyId;
     }
@@ -72,7 +75,10 @@ class VirtualAccountBuilder
         $minSize = static::ACCOUNT_SIZE_MIN;
         $maxSize = static::ACCOUNT_SIZE_MAX;
         if ($accountSize > $maxSize || $accountSize < $minSize)
-            throw new Exception("虛擬帳號總長度最長為 {$maxSize} 碼，最短為 {$minSize} 碼。", Exception::ACCOUNT_WRONG_SIZE);
+            throw new Exception(
+                "虛擬帳號長度為 {$minSize} ~ {$maxSize} 碼。",
+                Exception::ACCOUNT_WRONG_SIZE
+            );
 
         $this->accountSize = $accountSize;
     }
@@ -91,7 +97,10 @@ class VirtualAccountBuilder
             static::DOUBLE_AMOUNT_CHECKING,
             static::DOUBLE_AMOUNT_AND_DATE_CHECKING
         ])) {
-            throw new Exception("未定義檢查碼格式", Exception::UNKNOW_CHECKING_CODE_TYPE);
+            throw new Exception(
+                "未定義檢查碼格式",
+                Exception::UNKNOW_CHECKING_CODE_TYPE
+            );
         }
 
         $this->checkingCodeType = $checkingCodeType;
@@ -127,7 +136,10 @@ class VirtualAccountBuilder
 
         // 驗證
         if (($len = strlen($account)) != $this->accountSize) {
-            throw new Exception("生成失敗", Exception::PRODUCT_INCOMPATIBLE);
+            throw new Exception(
+                "生成失敗",
+                Exception::PRODUCT_INCOMPATIBLE
+            );
         }
 
         return $account;
@@ -144,7 +156,10 @@ class VirtualAccountBuilder
     {
         $maxSize = static::AMOUNT_SIZE_MAX;
         if ((integer)$amount <= 0 || strlen($amount) > $maxSize)
-            throw new Exception("金額必須大於0，小於 {$maxSize} 位數之整數。", Exception::AMOUNT_WRONG_SIZE);
+            throw new Exception(
+                "金額必須大於0，最大為 {$maxSize} 位數之整數。",
+                Exception::AMOUNT_WRONG_SIZE
+            );
 
         return $amount;
     }
@@ -182,7 +197,10 @@ class VirtualAccountBuilder
                 return $this->checkingCodeBuilder = new DoubleCheckingCodeBuilder();
 
             default:
-                throw new Exception("未定義檢查碼格式", Exception::UNSET_CHECKING_CODE_TYPE);
+                throw new Exception(
+                    "未定義檢查碼格式",
+                    Exception::UNSET_CHECKING_CODE_TYPE
+                );
         }
     }
 
@@ -221,7 +239,10 @@ class VirtualAccountBuilder
                 return "{$date}{$number}";
 
             default:
-                throw new Exception("未定義檢查碼格式", Exception::UNSET_CHECKING_CODE_TYPE);
+                throw new Exception(
+                    "未定義檢查碼格式",
+                    Exception::UNSET_CHECKING_CODE_TYPE
+                );
         }
     }
 
